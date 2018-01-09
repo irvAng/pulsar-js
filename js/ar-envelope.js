@@ -1,3 +1,4 @@
+//need to add set attack and set release
 class Ar_env {
 	constructor(attack, release, amplitude) {
 		if (!Ar_env.verifySampleRate()) return;
@@ -8,9 +9,26 @@ class Ar_env {
 		this.trigger = false;
 		this.increments = 0;
 		this.currentIncrement = 0;
-		this.triggerFlag = false;
 		this.calculateIncrements(
 			0, this.ampTarget, this._attackDurationSamples);
+	}
+
+	//if trigger is false, we calculate the increments. If a change to release
+	//is made while the envelope is running, it will be made on returnEnv
+	set attack(newAttackTimeInMs) {
+		this._attackDurationSamples = Ar_env.msDurToSampDur(newAttackTimeInMs);
+		if (this.trigger === false) {
+			this.calculateIncrements(
+				0, this.ampTarget, this._attackDurationSamples);
+		}
+	}
+
+	//returns attack duration in samples
+	get attack() { return this._attackDurationSamples; }
+
+	//not calculating "release" (only attack), it is calculated in returnEnv(),
+	set release(newReleaseTimeInMs) {
+		this._releaseDurationSamples = Ar_env.msDurToSampDur(newReleaseTimeInMs);
 	}
 
 	static msDurToSampDur(ms) {
@@ -44,28 +62,24 @@ class Ar_env {
 	}
 }
 
-//  -----------------------------------
 //====STATIC PROPERTIES
-Ar_env._sampleRate;//sampleRate
+Ar_env._sampleRate;//sampleRate - undefined until explicitly set
 Ar_env.samplesPerMs = 0;// samples per millisecond
 
-//  -----------------------------------
 //====ARENV FUNCTIONS
-
 //  -----------------------------------
 Ar_env.prototype.triggerEnv = function () {
-	if (!this.trigger) {
+	if (!this.trigger) { //if trigger is off, go for it, trigger it
 		this.trigger = true;
 		this.currentIncrement = 0;
-	} else {
-		this.triggerFlag = true;
-	}
+	} 
 }
 
 //  -----------------------------------
 Ar_env.prototype.calculateIncrements = function (from, to, durationInSamples) {
-	//for Ar_Env, when incrementing from should be 0, to the target;
+	//-for Ar_Env, when incrementing from should be 0, to the target;
 	//	when decrementing from should be the taget, to should be 0
+	//-durationInSamples is the duration of the attack or the release in cuestion
 	this.increments = (to - from) / durationInSamples;
 }
 
@@ -100,11 +114,6 @@ Ar_env.prototype.returnEnv = function () {
 				0, this.ampTarget, this._attackDurationSamples);
 
 			this.trigger = false;// wait for next trigger
-			if (this.triggerFlag) {
-				//will return before being called again
-				this.triggerEnv();
-				this.triggerFlag = false;
-			}
 
 			//second b: return if no destination has been reached
 			return this.currentIncrement;
@@ -115,7 +124,13 @@ Ar_env.prototype.returnEnv = function () {
 	}
 }
 
-//  -----------------------------------
+
+
+//=====================================
+//=====================================
+/* DEPRECATED lol - little did it last- 
+	it is best to do these calculations outside, in the audio loop
+
 Ar_env.prototype.envelopeInput = function (input) {
 
 	//if no trigger, just return 0
@@ -160,7 +175,7 @@ Ar_env.prototype.envelopeInput = function (input) {
 		return this.currentIncrement * input;
 	}
 }
-
+*/
 
 
 /** NOTE 1

@@ -3,7 +3,7 @@
 function createAll(numberOfItems, oscArr, envArr, grainArr) {
 	for (let i = 0; i < numberOfItems; i++) {
 		oscArr.push(new MyOsc());
-		envArr.push(new Ar_env(1, 10, 1));
+		envArr.push(new Ar_env(50, 50, 1));
 		grainArr.push(new Grain(Math.random() * 500 + 100, 1, 50, 50));
 	}
 }

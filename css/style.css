@@ -3,3 +3,9 @@ body {
     padding: 0;
     background: rgb(102, 174, 175);
 }
+
+/* The physical size of the input box can be controlled using the size attribute. With it, you can specify the number of characters the text input can display at a time. This affects the width of the element, letting you specify the width in terms of characters rather than pixels. */
+/*input display out*/
+.i-out {
+	size: 6;
+}

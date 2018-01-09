@@ -12,6 +12,7 @@
 	<script src="js/myOscillator.js"></script>
 	<script src="js/ar-envelope.js"></script>
 	<script src="js/grain.js"></script>
+	<script src="js/script.js"></script>
 	<link rel="stylesheet" href="css/style.css">
 
 	<!--[if lt IE 9]>
@@ -20,11 +21,10 @@
 </head>
 
 <body>
-	<h1>ScriptProcessorNode example</h1>
+	<h1>Pulsar Synthesizer - Web Audio</h1>
 
 	<button id='connect-sound'>Connect sound</button>
-	<button id='disconnect-sound'>Disconnect</button>
-	<button id='env1'>Envelope a note</button>
+	<button id='disconnect-sound'>Disconnect sound</button>
 
 	<br>
 	<hr>
@@ -33,37 +33,35 @@
 	<br>
 	<!-- ATTACK1 -->
 	<label for='attack1'>Attack 1 (ms)</label>
-	<input id='attack1' class='range' type="range" step="1" min="1" max="2000" value="50" name="attack1">
-	<input id='attack1out' type="text" value='50' name='attack1out' readonly>
+	<input id='attack1' class='range' type="range" step="1" min="1" max="100" value="50" name="attack1">
+	<input id='attack1out' size="7" type="text" value='50' name='attack1out' readonly>
 
 	<br>
 
 	<!-- RELEASE1 -->
 	<label for='release1'>Release</label>
-	<input id='release1' class='range' type="range" step="1" min="1" max="2000" value="50" name="release1">
-	<input id='release1out' type="text" value='200' name='release1out' readonly>
+	<input id='release1' class='range' type="range" step="1" min="1" max="100" value="50" name="release1">
+	<input id='release1out'  type="text" value='50' name='release1out' readonly>
 
 	<br>
 
-	<!-- TRAIN FREQUENCY 1 - EMISSION FREQUENCY 1-->
-	<label for='trainFreq1'>Train freq 1</label>
-	<input id='trainFreq1' class='range' type="range" step="0.001" min="5" max="1000" value="500" name="trainFreq1">
-	<input id='trainFreq1out' class='range' type="text" value='500' name='trainFreq1out' readonly>
-
+	<!-- TRAIN FREQUENCY 1 - EMISSION FREQUENCY 1 - Fp = 1Hz..5kHz-->
+	<label for='trainFreq1'>Train freq 1: </label>
+	<input id='trainFreq1' class='range' type="range" step="0.0001" min="0" max="1" value="0.25" name="trainFreq1"> 
+	Hz (Grains per second): <input id='trainFreqHz1out' size="7" class='range' type="text" value='1' name='trainFreq1out' readonly> 
+	<!-- Grain dur in ms: <input id='trainFreqMs1out' size="7" class='range' type="text" value='1000' name='trainFreq1out' readonly> -->
 	<br>
 
-	<!-- PHASER FREQUENCY -->
-	<label for='phaserFreq'>Phaser frequency (Hz)</label>
-	<input id='phaserFreq' class='range' type="range" step="0.005" min="0.05" max="2" value="0.225" name="someName">
-	<input id='phFreqOut' type="text" value='0.225' name='phaserFreq' readonly>
+	<!-- FORMANT FREQUENCY - Fd = 80Hz..10kHz -->
+	<label for='formantFreq1'>Formant frequency 1(Hz)</label>
+	<input id='formantFreq1' class='range' type="range" step="0.005" min="80" max="10000" value="400" name="formantFreq1">
+	<input id='formantFreqOut1' size="7" type="text" value='0.225' name='formantFreqOut1' readonly>
 
 	<br>
 	<hr>
 	<div id="mousePositions"></div>
 	<div id="mouseScreenPositions"></div>
 </body>
-<script src="js/script.js">
 
-</script>
 
 </html>

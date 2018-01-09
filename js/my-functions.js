@@ -5,6 +5,9 @@ Number.prototype.map = function (in_min, in_max, out_min, out_max) {
 	return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+//better version, since I am not writing to the prototype
+//  Map function. Will produce values out of range if input is out of range
+//  https://gist.github.com/AugustMiller/85b54d49493bb71ba81e
 function mapNumber(input, in_min, in_max, out_min, out_max) {
 	return (input - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }

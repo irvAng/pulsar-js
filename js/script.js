@@ -25,23 +25,19 @@ console.log('SAMPLE_RATE:', SAMPLE_RATE, 'bufferSize:', scriptNode.bufferSize);
 MyOsc.sampleRate = SAMPLE_RATE;
 Ar_env.sampleRate = SAMPLE_RATE;
 
-let amp = 0.1;
+let amp = 0.1; //scales output
 
-let myOsc1 = new MyOsc(400);
-
-let freq = 400;
-
-let myEnv1 = new Ar_env(2000, 1000, 1);
-let myEnv2 = new Ar_env(2000, 1000, 1);
-
-let testArray = [];
 
 //====IMPORTED
-let numberOfItems = 32;//number of voices
+let numberOfItems = 64;//number of voices
 let oscillators = [];
 let envelopes = [];
 let grains = [];
 let lstnrs = {};//holds listeners stats / initialized with listeners
+
+
+let counter1 = 0;//in samplesPerSecond
+var counter2 = 0;
 
 //-------------------------------------
 //====AUDIO LOOP - this is where the magic happens
@@ -54,14 +50,14 @@ scriptNode.onaudioprocess = function (audioProcessingEvent) {
 	var leftOut = audioProcessingEvent.outputBuffer.getChannelData(0);
 	var rightOut = audioProcessingEvent.outputBuffer.getChannelData(1);
 
+	//if so many samples, trigger
 	//fill buffer
 	for (var i = 0; i < leftOut.length; i++) {//i = sample
 
 		let currentSample = 0;
 
-		myOsc1.freq = 100 + myEnv2.returnEnv() * 1000;
-		currentSample = myEnv1.returnEnv() * myOsc1.sineWave();
 		
+
 		for (let i = 0; i < numberOfItems; i++) {
 			if (envelopes[i].trigger === true) {
 				// toOut = ;
@@ -71,6 +67,13 @@ scriptNode.onaudioprocess = function (audioProcessingEvent) {
 			}
 		}
 
+		counter1++;
+		counter1 = counter1 % lstnrs.trainFreq1;//value in samples
+		if(!counter1) { //if (counter1 === 0)
+			turnGrainOn();//turn a grain on
+			// getOn();
+		}
+
 		currentSample *= amp;//scale output
 		leftOut[i] = currentSample;
 		rightOut[i] = currentSample;
@@ -78,13 +81,27 @@ scriptNode.onaudioprocess = function (audioProcessingEvent) {
 }
 
 //-------------------------------------
+let convert = {
+	sampleRate : SAMPLE_RATE,
+	samplesPerMs: SAMPLE_RATE / 1000.0,
+
+	msDurToSampDur (ms) {
+		let durationInSamples = Math.round(ms * this.samplesPerMs);
+		if (durationInSamples < 4) durationInSamples = 4;
+		return durationInSamples;
+	},
+
+	samplesToHz (samples) {
+		return this.sampleRate / samples;
+	}
+}
+//-------------------------------------
 function turnGrainOn() {
 	for (let i = 0; i < numberOfItems; i++) {
 		if (envelopes[i].trigger === false) {
 			//turn on the first one that is off and break the loop
 			envelopes[i].triggerEnv();
 			grains[i].freq = Math.random() * 1000 + 300;
-			console.log('turned on envelope', i);
 			break;
 		}
 	}
