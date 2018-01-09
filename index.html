@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Script processor node example</title>
+
+	<script src="js/utilities.js"></script>
+	<script src="js/listeners.js"></script>
+	<script src="js/my-functions.js"></script>
+	<script src="js/myOscillator.js"></script>
+	<script src="js/ar-envelope.js"></script>
+	<script src="js/grain.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+
+	<!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<h1>ScriptProcessorNode example</h1>
+
+	<button id='connect-sound'>Connect sound</button>
+	<button id='disconnect-sound'>Disconnect</button>
+	<button id='env1'>Envelope a note</button>
+
+	<br>
+	<hr>
+
+	<button id="trigger1" type="button">Trigger test</button>
+	<br>
+	<!-- ATTACK1 -->
+	<label for='attack1'>Attack 1 (ms)</label>
+	<input id='attack1' class='range' type="range" step="1" min="1" max="2000" value="50" name="attack1">
+	<input id='attack1out' type="text" value='50' name='attack1out' readonly>
+
+	<br>
+
+	<!-- RELEASE1 -->
+	<label for='release1'>Release</label>
+	<input id='release1' class='range' type="range" step="1" min="1" max="2000" value="50" name="release1">
+	<input id='release1out' type="text" value='200' name='release1out' readonly>
+
+	<br>
+
+	<!-- TRAIN FREQUENCY 1 - EMISSION FREQUENCY 1-->
+	<label for='trainFreq1'>Train freq 1</label>
+	<input id='trainFreq1' class='range' type="range" step="0.001" min="5" max="1000" value="500" name="trainFreq1">
+	<input id='trainFreq1out' class='range' type="text" value='500' name='trainFreq1out' readonly>
+
+	<br>
+
+	<!-- PHASER FREQUENCY -->
+	<label for='phaserFreq'>Phaser frequency (Hz)</label>
+	<input id='phaserFreq' class='range' type="range" step="0.005" min="0.05" max="2" value="0.225" name="someName">
+	<input id='phFreqOut' type="text" value='0.225' name='phaserFreq' readonly>
+
+	<br>
+	<hr>
+	<div id="mousePositions"></div>
+	<div id="mouseScreenPositions"></div>
+</body>
+<script src="js/script.js">
+
+</script>
+
+</html>
